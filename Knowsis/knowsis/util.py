@@ -1,29 +1,12 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-# from exceptions import BadRequest
+from .exceptions import BadRequest
 from itertools import groupby
 
 import csv
 import app_settings
 import time
-
-
-class BadRequest(Exception):
-
-    status_code = 400
-
-    def __init__(self, message, status_code=None, payload=None):
-        Exception.__init__(self)
-        self.message = message
-        if status_code is not None:
-            self.status_code = status_code
-        self.payload = payload
-
-    def to_dict(self):
-        data = dict(self.payload or ())
-        data['error_message'] = self.message
-        return data
 
 
 def _get_row_data():
@@ -35,7 +18,10 @@ def _get_row_data():
 
 
 def _get_date(date_string):
-    return datetime.fromtimestamp(time.mktime(time.strptime(date_string, '%Y-%m-%d')))
+    try:
+        return datetime.fromtimestamp(time.mktime(time.strptime(date_string, '%Y-%m-%d')))
+    except ValueError:
+        raise BadRequest('The date %s is invalid' % date_string, status_code=400)
 
 
 def _get_date_keys(start_date, delta):

@@ -24,11 +24,12 @@ def handle_unauthorized(error):
 
 @app.route('/api/v0/tweets/count/', methods=['GET'])
 @authenticate
-def tweets_view():
+def tweets_view(bearer_token=None):
     start = request.args.get('startdate', None)
     if start is None:
         raise BadRequest('Please provide a "startdate" parameter in the format yyyy-mm-dd', status_code=400)
-    end = request.args.get('enddate', None)       
+    end = request.args.get('enddate', None)
+    print end
 
     count = get_tweet_count(start, end)
 
