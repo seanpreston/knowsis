@@ -41,7 +41,7 @@ def get_tweet_count(start, end=None):
 
         delta = (end_date - start_date)
         if delta.days > app_settings.DATE_RANGE_LIMIT_DAYS:
-            raise BadRequest('The date range must be two weeks or less', status_code=400)
+            raise BadRequest('The date range must be %s days or less' % app_settings.DATE_RANGE_LIMIT_DAYS, status_code=400)
         elif delta.days < 0:
             raise BadRequest('The start date must be before the end date', status_code=400)
 
