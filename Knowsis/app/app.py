@@ -7,11 +7,6 @@ from util import get_tweet_count
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-    return "Hello, World!"
-
-
 @app.errorhandler(BadRequest)
 def handle_bad_request(error):
     response = jsonify(error.to_dict())
@@ -20,7 +15,7 @@ def handle_bad_request(error):
 
 
 @app.errorhandler(Unauthorized)
-def handle_bad_request(error):
+def handle_unauthorized(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
@@ -29,8 +24,7 @@ def handle_bad_request(error):
 
 @app.route('/api/v0/tweets/count/', methods=['GET'])
 @authenticate
-def tweets_view():    
-
+def tweets_view():
     start = request.args.get('startdate', None)
     if start is None:
         raise BadRequest('Please provide a "startdate" parameter in the format yyyy-mm-dd', status_code=400)
