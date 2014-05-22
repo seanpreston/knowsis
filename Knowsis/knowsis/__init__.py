@@ -23,7 +23,7 @@ def handle_unauthorized(error):
 
 
 @app.route('/api/v0/tweets/count/', methods=['GET'])
-@authenticate
+# @authenticate
 def tweets_view(bearer_token=None):
     start = request.args.get('startdate', None)
     if start is None:

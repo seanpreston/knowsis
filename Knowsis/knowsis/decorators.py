@@ -4,6 +4,8 @@ from flask import request
 from base64 import b64decode
 from .exceptions import Unauthorized
 
+import app_settings
+
 
 def authenticate(f):
     @wraps(f)
@@ -18,9 +20,7 @@ def authenticate(f):
                 except (TypeError, UnicodeDecodeError):
                     raise Unauthorized('Incorrectly formatted token', status_code=401)
                 else:
-                    # Coded token = 'YjdiZWU4MzNmNGU5MGJiYzNmYTk3MmIwYzkwMWEwZGM='
-                    # TODO: Get example token
-                    if token == 'b7bee833f4e90bbc3fa972b0c901a0dc':
+                    if token == app_settings.DECODED_TOKEN:
                         kwargs['bearer_token'] = token
                         return f(*args, **kwargs)
         raise Unauthorized('Invalid token', status_code=401)
